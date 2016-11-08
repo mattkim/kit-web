@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router'
 import App from './components/App/App';
 import Event from './components/Event/Event';
-import { createStore } from 'redux'
-import reducer from './reducers/index'
 import './index.css';
+import { createStore } from 'redux'
 import { Provider } from 'react-redux';
+import reducer from './reducers/index'
 
 const store = createStore(reducer)
 
@@ -16,7 +16,14 @@ function Provide(store, component) {
     render() {
       return (
         <Provider store={store}>
-          {component}
+          {
+            React.cloneElement(
+              component,
+              {
+                params: this.props.params,
+              }
+            )
+          }
         </Provider>
       )
     }
@@ -25,8 +32,8 @@ function Provide(store, component) {
 
 ReactDOM.render((
   <Router history={browserHistory}>
-    <Route path="/" component={Provide(store, <App/>)}>
-      <Route path="event" component={Provide(store, <Event/>)}/>
-    </Route>
+    <Route path="/" component={Provide(store, <App/>)}/>
+    <Route path="/event" component={Provide(store, <Event/>)}/>
+    <Route path="/event/:uuid" component={Provide(store, <Event/>)}/>
   </Router>
 ), document.getElementById('root'))

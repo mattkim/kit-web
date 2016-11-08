@@ -3,3 +3,24 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.root {
+}
+
+.container {
+  font-size: 1em;
+  margin: 10px;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.superLarge {
+  font-size: 100px;
+  margin-bottom: -15px;
+}
+
+.strongText {
+  font-weight: bold;
+}
