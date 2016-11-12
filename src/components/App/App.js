@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
 import './App.css';
 import TiCoffee from 'react-icons/lib/ti/coffee';
 import {
