@@ -20,9 +20,6 @@ import { Button as IGButton } from 'react-bootstrap/lib/InputGroup'
 import { browserHistory } from 'react-router'
 
 class Event extends Component {
-  static propTypes = {
-    curr_user_uuid: React.PropTypes.string,
-  }
 
   constructor(props) {
     super(props)
@@ -47,7 +44,7 @@ class Event extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInviteeSubmit = this.handleInviteeSubmit.bind(this);
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
-    // this.handlePokeSubmit = this.handlePokeSubmit.bind(this);
+    this.handlePokeSubmit = this.handlePokeSubmit.bind(this);
     this.loadEvent = this.loadEvent.bind(this)
   }
 
@@ -85,20 +82,30 @@ class Event extends Component {
     this.setState({event: await post('event/create', event)})
   }
 
+  async handlePokeSubmit(e) {
+    post('event/poke', this.state.event);
+  }
+
   async handleMessageSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
+
+    if (!this.props.location.query.curr_user_uuid
+      || !this.state.event.uuid
+      || !this.state.currMessage
+    ) {
+      return
+    }
 
     const event = this.state.event
     event.messages.push({
-      created_by_user_uuid: this.props.curr_user_uuid,
+      created_by_user_uuid: this.props.location.query.curr_user_uuid,
       event_uuid: this.state.event.uuid,
       message: this.state.currMessage,
-    });
+    })
 
-    await this.updateEvent(event);
+    await this.updateEvent(event)
 
-    this.setState({ currMessage: "" });
-    e.target[0].value = '';
+    this.setState({ currMessage: "" })
   }
 
   async handleInviteeSubmit(e) {
@@ -124,11 +131,43 @@ class Event extends Component {
     await this.createEvent(event)
 
     if (!this.props.params.uuid && this.state.event.uuid && this.state.event.created_by_user.uuid) {
-      browserHistory.push({pathname: `/event/${this.state.event.uuid}`, query: {curr_user_uuid: this.state.event.created_by_user.uuid}})
+      browserHistory.push({
+        pathname: `/event/${this.state.event.uuid}`,
+        query: {
+          curr_user_uuid: this.state.event.created_by_user.uuid
+        }
+      })
     }
   }
 
   // Renderers
+
+  renderConversation() {
+    var conv = "";
+
+    // Simple sort in ascending timestamp.
+    this.state.event.messages.sort((a,b) => {
+      if (a.created_at < b.created_at) {
+        return -1;
+      } else if (a.created_at > b.created_at) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    this.state.event.messages.forEach(
+      m => {
+        if (m.message && m.created_by_user && m.created_by_user.email) {
+          conv += "<strong>" + m.created_by_user.email + ":</strong> " + m.message + "<br/>"
+        }
+      }
+    );
+
+    return (
+      <div dangerouslySetInnerHTML={{__html: conv}} />
+    );
+  }
 
   renderInvitees() {
     return createListGroup(
@@ -145,6 +184,7 @@ class Event extends Component {
         <div>
           <Button
             bsStyle="info" bsSize="large" block
+            onClick={this.handlePokeSubmit}
           >
             Poke
           </Button>
@@ -205,6 +245,8 @@ class Event extends Component {
             <Row>
               <Col sm={0} md={3}/>
               <Col sm={12} md={6}>
+                {this.renderConversation()}
+                <br/>
                 <Form onSubmit={this.handleMessageSubmit}>
                   <InputGroup>
                     <FormControl
@@ -212,6 +254,7 @@ class Event extends Component {
                       autoComplete="off"
                       ref="nameInput"
                       onChange={createInputChangeHandler(this, 'currMessage')}
+                      value={this.state.currMessage}
                     />
                     <IGButton>
                       <Button type="submit">
