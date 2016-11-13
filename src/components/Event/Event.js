@@ -60,9 +60,6 @@ class Event extends Component {
   // Initiliazers
 
   loadEvent() {
-    console.log(this.props)
-    console.log(this.props.location)
-    console.log(this.props.location.query)
     if (exists(this.props.params.uuid)) {
       get(
         'event',
@@ -84,10 +81,8 @@ class Event extends Component {
   }
 
   async createEvent(event) {
-    console.log(event)
     this.setState({event})
     this.setState({event: await post('event/create', event)})
-    console.log(this.state.event)
   }
 
   async handleMessageSubmit(e) {
@@ -129,7 +124,6 @@ class Event extends Component {
     await this.createEvent(event)
 
     if (!this.props.params.uuid && this.state.event.uuid && this.state.event.created_by_user.uuid) {
-      // browserHistory.push(`/event/${this.state.event.uuid}?curr_user_uuid=${this.state.event.created_by_user.uuid}`)
       browserHistory.push({pathname: `/event/${this.state.event.uuid}`, query: {curr_user_uuid: this.state.event.created_by_user.uuid}})
     }
   }

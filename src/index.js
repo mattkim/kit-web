@@ -21,6 +21,9 @@ function Provide(store, component) {
               component,
               {
                 params: this.props.params,
+                location: this.props.location,
+                // TODO: history doesn't work even though it should?
+                history: this.props.history,
               }
             )
           }
