@@ -17,7 +17,7 @@ import {
   Row,
 } from 'react-bootstrap';
 import { Button as IGButton } from 'react-bootstrap/lib/InputGroup'
-import { browserHistory } from 'react-router'
+import { hashHistory } from 'react-router'
 
 class Event extends Component {
 
@@ -131,7 +131,7 @@ class Event extends Component {
     await this.createEvent(event)
 
     if (!this.props.params.uuid && this.state.event.uuid && this.state.event.created_by_user.uuid) {
-      browserHistory.push({
+      hashHistory.push({
         pathname: `/event/${this.state.event.uuid}`,
         query: {
           curr_user_uuid: this.state.event.created_by_user.uuid
