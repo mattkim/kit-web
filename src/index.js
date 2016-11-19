@@ -29,6 +29,7 @@ ReactDOM.render((
     <Route path="/" component={Provide}>
       <IndexRoute component={Home} />
       <Route path="event" component={Event} />
+      <Route path="event/:uuid" component={Event} />
     </Route>
   </Router>
 ), document.getElementById('root'))
