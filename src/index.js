@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, browserHistory } from 'react-router'
+import { Router, Route, hashHistory } from 'react-router'
 import App from './components/App/App';
 import Home from './components/Home/Home';
 import Event from './components/Event/Event';
@@ -25,7 +25,7 @@ const Provide = React.createClass({
 })
 
 ReactDOM.render((
-  <Router history={browserHistory}>
+  <Router history={hashHistory}>
     <Route path="/" component={Provide}>
       <IndexRoute component={Home} />
       <Route path="event" component={Event} />
