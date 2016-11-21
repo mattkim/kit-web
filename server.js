@@ -4,10 +4,9 @@ const app = express();
 // TODO: won't this conflict with front end port in prod?
 app.set('port', (process.env.PORT || 3001));
 
-console.log(process.env.NODE_ENV);
-
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
+  console.log("Using client/build");
   app.use(express.static('client/build'));
 }
 
