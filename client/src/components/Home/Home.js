@@ -25,6 +25,8 @@ class Home extends Component {
                   <br/>
                   <br/>
                   Creating events will help us meet up more often and grow stronger relationships.
+                  <br/>
+                  Testing.
                 </p>
                 <br/>
                 <br/>
