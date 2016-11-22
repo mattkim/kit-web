@@ -1,5 +1,4 @@
-// const API_URL = process.env.REACT_APP_API_URL
-const API_URL = 'https://kit-api-0.herokuapp.com'
+const API_URL = process.env.REACT_APP_API_URL
 
 function path(curr) {
   // TODO: use real path joining
